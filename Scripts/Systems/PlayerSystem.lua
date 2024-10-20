@@ -5,6 +5,7 @@ local PlayerSystem =
 
 function PlayerSystem:Initialise(params)
         self.Transform = Transform:CreateTransform(params)
+        params.transform = self.Transform
         self.Renderer = Renderer:CreateRenderer(params)
         self.Speed = params.Speed or 128
     end

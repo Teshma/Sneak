@@ -41,7 +41,7 @@ function love.update(dt)
 end
 
 function love.draw()
-    Renderer:Render(PlayerSystem)
+    Renderer:Render()
     EnemySystem:Render()
 end
 

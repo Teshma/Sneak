@@ -11,7 +11,8 @@ function Transform:CreateTransform(params)
     transform.h = params.h or 20
     transform.cx = transform.x + transform.w/2
     transform.cy = transform.y + transform.h/2
-    transform.direction = params.direction or {x = 0, y = -1}
+    transform.initialDirection = params.direction or {x = 0, y = -1}
+    transform.angle = math.atan2(transform.initialDirection.y, transform.initialDirection.x)
 
     table.insert(self.transforms, transform)
     return transform
