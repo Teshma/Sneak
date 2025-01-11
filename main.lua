@@ -2,7 +2,8 @@ Transform = require "Scripts.Components.Transform"
 Renderer = require "Scripts.Components.Renderer"
 EnemySystem = require "Scripts.Systems.EnemySystem"
 PlayerSystem = require "Scripts.Systems.PlayerSystem"
-
+StateMachine = require "Scripts.Systems.StateMachine"
+debug = false
 
 function love.load()
     Width, Height = love.graphics.getDimensions()
@@ -42,11 +43,18 @@ end
 
 function love.draw()
     Renderer:Render()
-    EnemySystem:Render()
+    if debug then
+        EnemySystem:Render()
+    end
+    love.graphics.print(love.timer.getFPS(), 0, 0)
 end
 
 function love.keypressed(key)
     if key == "escape" then
         love.event.quit()
+    end
+
+    if key == "0" then
+        debug = not debug
     end
 end
