@@ -1,16 +1,16 @@
-local PlayerSystem = 
+local Player = 
 {
     
 }
 
-function PlayerSystem:Initialise(params)
-        self.Transform = Transform:CreateTransform(params)
+function Player:Initialise(params)
+        self.Transform = Transforms:CreateTransform(params)
         params.transform = self.Transform
-        self.Renderer = Renderer:CreateRenderer(params)
+        self.Renderer = Renderers:CreateRenderer(params)
         self.Speed = params.Speed or 128
     end
     
-function PlayerSystem:Update(dt)
+function Player:Update(dt)
         if love.keyboard.isDown("w") then
             self.Transform.y = self.Transform.y - self.Speed * dt
         end
@@ -32,8 +32,8 @@ function PlayerSystem:Update(dt)
     end
 end
 
-function PlayerSystem:Shoot()
+function Player:Shoot()
 
 end
 
-return PlayerSystem
+return Player

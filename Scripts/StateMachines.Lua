@@ -1,9 +1,9 @@
-local StateMachine =
+local StateMachines =
 {
     machines = {}
 }
 
-function StateMachine:CreateStateMachine(states)
+function StateMachines:CreateStateMachine(states)
     local stateMachine = {}
     stateMachine.states = states
 
@@ -14,10 +14,10 @@ local function UpdateMachine(StateMachine)
 
 end
 
-function StateMachine:Update()
+function StateMachines:Update()
     for _, machine in ipairs(self.machines) do
         UpdateMachine(machine)
     end
 end
 
-return StateMachine
+return StateMachines

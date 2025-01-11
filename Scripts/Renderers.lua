@@ -1,9 +1,9 @@
-local RenderUtils =
+local Renders =
 {
     Renderers = {}
 }
 
-function RenderUtils:CreateRenderer(params)
+function Renders:CreateRenderer(params)
     local t = {}
     t.defaultColour = params.colour or {1, 1, 1, 1}
     t.colour = t.defaultColour
@@ -40,10 +40,10 @@ local function Render(Renderer)
     love.graphics.setColor(r,g,b,a)
 end
 
-function RenderUtils:Render()
+function Renders:Render()
     for _,renderer in ipairs(self.Renderers) do
         Render(renderer)
     end
 end
 
-return RenderUtils
+return Renders

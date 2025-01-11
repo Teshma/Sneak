@@ -1,9 +1,9 @@
-local Transform =
+local Transforms =
 {
     transforms = {}
 }
 
-function Transform:CreateTransform(params)
+function Transforms:CreateTransform(params)
     local transform = {}
     transform.x = params.x or Width/2
     transform.y = params.y or Height/2
@@ -18,11 +18,11 @@ function Transform:CreateTransform(params)
     return transform
 end
 
-function Transform:Update(dt)
+function Transforms:Update(dt)
     for _,transform in ipairs(self.transforms) do
         transform.cx = transform.x + transform.w/2
         transform.cy = transform.y + transform.h/2
     end
 end
 
-return Transform
+return Transforms

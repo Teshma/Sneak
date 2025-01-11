@@ -1,8 +1,8 @@
-Transform = require "Scripts.Components.Transform"
-Renderer = require "Scripts.Components.Renderer"
-EnemySystem = require "Scripts.Systems.EnemySystem"
-PlayerSystem = require "Scripts.Systems.PlayerSystem"
-StateMachine = require "Scripts.Systems.StateMachine"
+Transforms = require "Scripts.Transforms"
+Renderers = require "Scripts.Renderers"
+Enemies = require "Scripts.Enemies"
+Player = require "Scripts.Player"
+StateMachines = require "Scripts.StateMachines"
 debug = false
 
 function love.load()
@@ -18,7 +18,7 @@ function love.load()
         colour = {1, 0, 1, 1}
     }
 
-    PlayerSystem:Initialise(playerData)
+    Player:Initialise(playerData)
 
     local enemyData =
     {
@@ -32,19 +32,19 @@ function love.load()
         sightRange = 150,
     }
 
-    EnemySystem:Create(enemyData)
+    Enemies:Create(enemyData)
 end
 
 function love.update(dt)
-    Transform:Update(dt)
-    PlayerSystem:Update(dt)
-    EnemySystem:Update(PlayerSystem, dt)
+    Transforms:Update(dt)
+    Player:Update(dt)
+    Enemies:Update(Player, dt)
 end
 
 function love.draw()
-    Renderer:Render()
+    Renderers:Render()
     if debug then
-        EnemySystem:Render()
+        Enemies:Render()
     end
     love.graphics.print(love.timer.getFPS(), 0, 0)
 end

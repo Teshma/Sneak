@@ -1,4 +1,4 @@
-local EnemySystem =
+local Enemies =
 {
     enemies = {}
 }
@@ -30,21 +30,21 @@ end
             
 ---------------------------------------------------------------------------------------------------
 
-function EnemySystem:Create(params)
+function Enemies:Create(params)
     local enemy = {}
-    enemy.Transform = Transform:CreateTransform(params)
+    enemy.Transform = Transforms:CreateTransform(params)
     params.transform = enemy.Transform
-    enemy.Renderer = Renderer:CreateRenderer(params)
+    enemy.Renderer = Renderers:CreateRenderer(params)
     enemy.sightRange = params.sightRange
 
     enemy.Vision = {}
     enemy.Vision.angle = math.acos(params.visionAngle or 0.8)
 
     enemy.VisionCone = {}
-    enemy.VisionCone.Renderer = Renderer:CreateRenderer({})
+    enemy.VisionCone.Renderer = Renderers:CreateRenderer({})
     RefreshVision(enemy)
 
-    enemy.StateMachine = StateMachine:CreateStateMachine()
+    enemy.StateMachine = StateMachines:CreateStateMachine()
 
     table.insert(self.enemies, enemy)
 end
@@ -107,7 +107,7 @@ end
 
 ---------------------------------------------------------------------------------------------------
 
-function EnemySystem:Update(Player, dt)
+function Enemies:Update(Player, dt)
     for _, enemy in ipairs(self.enemies) do
         UpdateEnemy(Player, enemy, dt)
     end
@@ -115,7 +115,7 @@ end
 
 ---------------------------------------------------------------------------------------------------
 
-function EnemySystem:Render()
+function Enemies:Render()
     for _, enemy in ipairs(self.enemies) do
         local r,g,b,a = love.graphics.getColor()
         love.graphics.setColor(1, 0, 1, 1)
@@ -129,4 +129,4 @@ end
 
 ---------------------------------------------------------------------------------------------------
 
-return EnemySystem
+return Enemies
