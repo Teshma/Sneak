@@ -1,8 +1,6 @@
-Transforms = require "Scripts.Transforms"
-Renderers = require "Scripts.Renderers"
-Enemies = require "Scripts.Enemies"
-Player = require "Scripts.Player"
-StateMachines = require "Scripts.StateMachines"
+require "Utils"
+RequireScripts("Scripts")
+
 debug = false
 
 function love.load()
@@ -43,9 +41,6 @@ end
 
 function love.draw()
     Renderers:Render()
-    if debug then
-        Enemies:Render()
-    end
     love.graphics.print(love.timer.getFPS(), 0, 0)
 end
 

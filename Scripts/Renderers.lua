@@ -1,9 +1,9 @@
-local Renders =
+Renderers =
 {
     Renderers = {}
 }
 
-function Renders:CreateRenderer(params)
+function Renderers:CreateRenderer(params)
     local t = {}
     t.defaultColour = params.colour or {1, 1, 1, 1}
     t.colour = t.defaultColour
@@ -12,6 +12,7 @@ function Renders:CreateRenderer(params)
     t.points = params.points or nil
     t.image = params.image or nil
     t.Transform = params.transform
+    t.DebugDraw = params.DebugDraw or nil -- function call for any debug related rendering
 
     table.insert(self.Renderers, t)
     return t
@@ -40,10 +41,12 @@ local function Render(Renderer)
     love.graphics.setColor(r,g,b,a)
 end
 
-function Renders:Render()
+function Renderers:Render()
     for _,renderer in ipairs(self.Renderers) do
         Render(renderer)
+
+        if debug and renderer.DebugDraw ~= nil then
+            renderer.DebugDraw()
+        end
     end
 end
-
-return Renders

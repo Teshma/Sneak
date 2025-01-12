@@ -1,4 +1,4 @@
-local Transforms =
+Transforms =
 {
     transforms = {}
 }
@@ -24,5 +24,3 @@ function Transforms:Update(dt)
         transform.cy = transform.y + transform.h/2
     end
 end
-
-return Transforms

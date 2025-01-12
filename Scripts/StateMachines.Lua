@@ -1,4 +1,4 @@
-local StateMachines =
+StateMachines =
 {
     machines = {}
 }
@@ -19,5 +19,3 @@ function StateMachines:Update()
         UpdateMachine(machine)
     end
 end
-
-return StateMachines

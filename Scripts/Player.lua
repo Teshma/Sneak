@@ -1,7 +1,4 @@
-local Player = 
-{
-    
-}
+Player = { }
 
 function Player:Initialise(params)
         self.Transform = Transforms:CreateTransform(params)
@@ -35,5 +32,3 @@ end
 function Player:Shoot()
 
 end
-
-return Player

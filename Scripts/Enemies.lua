@@ -1,39 +1,27 @@
-local Enemies =
+Enemies =
 {
     enemies = {}
 }
 
-local function RefreshVision(Enemy)
-    Enemy.Vision.x = Enemy.Transform.cx + Enemy.sightRange * math.cos(Enemy.Transform.angle)
-    Enemy.Vision.y = Enemy.Transform.cy + Enemy.sightRange * math.sin(Enemy.Transform.angle)
-
-    if Enemy.Vision.hyp == nil then
-        Enemy.Vision.hyp = math.sqrt(Enemy.sightRange^2 + (Enemy.sightRange*math.tan(Enemy.Vision.angle))^2)
-    end
-
-    Enemy.VisionCone.Renderer.points =
-    {
-        {
-            x = Enemy.Transform.cx,
-            y = Enemy.Transform.cy
-        },
-        {
-            x = Enemy.Transform.cx + Enemy.Vision.hyp*math.cos(Enemy.Transform.angle - Enemy.Vision.angle),
-            y = Enemy.Transform.cy + Enemy.Vision.hyp*math.sin(Enemy.Transform.angle - Enemy.Vision.angle)
-        },
-        {
-            x = Enemy.Transform.cx + Enemy.Vision.hyp*math.cos(Enemy.Transform.angle + Enemy.Vision.angle),
-            y = Enemy.Transform.cy + Enemy.Vision.hyp*math.sin(Enemy.Transform.angle + Enemy.Vision.angle)
-        }          
-    }
-end
-            
----------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------
 
 function Enemies:Create(params)
     local enemy = {}
     enemy.Transform = Transforms:CreateTransform(params)
     params.transform = enemy.Transform
+
+    params.DebugDraw = function ()
+        for _, enemy in ipairs(self.enemies) do
+            local r,g,b,a = love.graphics.getColor()
+            love.graphics.setColor(1, 0, 1, 1)
+            love.graphics.print(enemy.dot, enemy.Transform.x, enemy.Transform.y)
+
+            love.graphics.line(enemy.Transform.cx, enemy.Transform.cy, enemy.Transform.cx + enemy.DirectionToPlayer.x, enemy.Transform.cy + enemy.DirectionToPlayer.y)
+            love.graphics.line(enemy.Transform.cx, enemy.Transform.cy, enemy.Vision.x, enemy.Vision.y)
+            love.graphics.setColor(r,g,b,a)
+        end
+    end
+
     enemy.Renderer = Renderers:CreateRenderer(params)
     enemy.sightRange = params.sightRange
 
@@ -42,9 +30,10 @@ function Enemies:Create(params)
 
     enemy.VisionCone = {}
     enemy.VisionCone.Renderer = Renderers:CreateRenderer({})
-    RefreshVision(enemy)
 
     enemy.StateMachine = StateMachines:CreateStateMachine()
+
+    local patrolState = States.Create()
 
     table.insert(self.enemies, enemy)
 end
@@ -92,6 +81,31 @@ end
 
 ---------------------------------------------------------------------------------------------------
 
+local function RefreshVision(Enemy)
+    Enemy.Vision.x = Enemy.Transform.cx + Enemy.sightRange * math.cos(Enemy.Transform.angle)
+    Enemy.Vision.y = Enemy.Transform.cy + Enemy.sightRange * math.sin(Enemy.Transform.angle)
+
+    if Enemy.Vision.hyp == nil then
+        Enemy.Vision.hyp = math.sqrt(Enemy.sightRange^2 + (Enemy.sightRange*math.tan(Enemy.Vision.angle))^2)
+    end
+
+    Enemy.VisionCone.Renderer.points =
+    {
+        {
+            x = Enemy.Transform.cx,
+            y = Enemy.Transform.cy
+        },
+        {
+            x = Enemy.Transform.cx + Enemy.Vision.hyp*math.cos(Enemy.Transform.angle - Enemy.Vision.angle),
+            y = Enemy.Transform.cy + Enemy.Vision.hyp*math.sin(Enemy.Transform.angle - Enemy.Vision.angle)
+        },
+        {
+            x = Enemy.Transform.cx + Enemy.Vision.hyp*math.cos(Enemy.Transform.angle + Enemy.Vision.angle),
+            y = Enemy.Transform.cy + Enemy.Vision.hyp*math.sin(Enemy.Transform.angle + Enemy.Vision.angle)
+        }          
+    }
+end
+
 ---------------------------------------------------------------------------------------------------
 
 local function UpdateEnemy(Player, Enemy, dt)
@@ -112,21 +126,3 @@ function Enemies:Update(Player, dt)
         UpdateEnemy(Player, enemy, dt)
     end
 end
-
----------------------------------------------------------------------------------------------------
-
-function Enemies:Render()
-    for _, enemy in ipairs(self.enemies) do
-        local r,g,b,a = love.graphics.getColor()
-        love.graphics.setColor(1, 0, 1, 1)
-        love.graphics.print(enemy.dot, enemy.Transform.x, enemy.Transform.y)
-        
-        love.graphics.line(enemy.Transform.cx, enemy.Transform.cy, enemy.Transform.cx + enemy.DirectionToPlayer.x, enemy.Transform.cy + enemy.DirectionToPlayer.y)
-        love.graphics.line(enemy.Transform.cx, enemy.Transform.cy, enemy.Vision.x, enemy.Vision.y)
-        love.graphics.setColor(r,g,b,a)
-    end
-end
-
----------------------------------------------------------------------------------------------------
-
-return Enemies
