@@ -31,9 +31,8 @@ function Enemies:Create(params)
     enemy.VisionCone = {}
     enemy.VisionCone.Renderer = Renderers:CreateRenderer({})
 
-    enemy.StateMachine = StateMachines:CreateStateMachine()
-
-    local patrolState = States.Create()
+    local state = IdleState:Create({owner = self})
+    enemy.StateMachine = StateMachines:CreateStateMachine(state)
 
     table.insert(self.enemies, enemy)
 end
@@ -65,8 +64,10 @@ local function CanSeePoint(x, y, Enemy)
     local dot = dotX + dotY
     
     Enemy.dot = dot
+    print("EnemyMag: " .. enemyMag .. "     PlayerMag: ".. playerMag)
 
-    return playerMag < enemyMag and dot > 0.75
+    -- check if player is closer than the extent of vision wrt to angle
+    return playerMag <= enemyMag and dot > 0.5
 end
 
 ---------------------------------------------------------------------------------------------------
@@ -109,7 +110,6 @@ end
 ---------------------------------------------------------------------------------------------------
 
 local function UpdateEnemy(Player, Enemy, dt)
-    Enemy.Transform.angle = Enemy.Transform.angle + dt
     RefreshVision(Enemy)
 
     if (CanSeePlayer(Player.Transform, Enemy)) then

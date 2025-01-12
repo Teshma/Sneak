@@ -37,6 +37,7 @@ function love.update(dt)
     Transforms:Update(dt)
     Player:Update(dt)
     Enemies:Update(Player, dt)
+    StateMachines:Update()
 end
 
 function love.draw()

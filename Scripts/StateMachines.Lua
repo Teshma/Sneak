@@ -3,15 +3,18 @@ StateMachines =
     machines = {}
 }
 
-function StateMachines:CreateStateMachine(states)
+function StateMachines:CreateStateMachine(initialState)
     local stateMachine = {}
-    stateMachine.states = states
-
+    stateMachine.currentState = initialState
     table.insert(self.machines, stateMachine)
+
+    stateMachine.currentState:Enter()
+
+    return stateMachine
 end
 
-local function UpdateMachine(StateMachine)
-
+local function UpdateMachine(stateMachine)
+    stateMachine.currentState:Update()
 end
 
 function StateMachines:Update()

@@ -34,7 +34,7 @@ local function Render(Renderer)
                 love.graphics.line(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y)
             end
         end
-    else
+    elseif Renderer.Transform then
         love.graphics.rectangle("fill", Renderer.Transform.x, Renderer.Transform.y, Renderer.Transform.w, Renderer.Transform.h)
     end
 
