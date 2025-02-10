@@ -64,10 +64,23 @@ local function CanSeePoint(x, y, Enemy)
     local dot = dotX + dotY
     
     Enemy.dot = dot
-    print("EnemyMag: " .. enemyMag .. "     PlayerMag: ".. playerMag)
 
     -- check if player is closer than the extent of vision wrt to angle
     return playerMag <= enemyMag and dot > 0.5
+end
+
+---------------------------------------------------------------------------------------------------
+
+-- vision cone detection using separating axes theorem
+local function CanSeeBox(playerBox, Enemy)
+    -- calculate axes using normals for player's AABB box and Enemy's vision cone triangle
+    local axes = {}
+
+    for i = 1, #axes do
+        -- project playerbox and enemy in axes and test overlap
+            -- project by dot product between axes and matching edges of the box/player?
+        -- if no overlap then early out
+    end
 end
 
 ---------------------------------------------------------------------------------------------------
@@ -90,8 +103,7 @@ local function RefreshVision(Enemy)
         Enemy.Vision.hyp = math.sqrt(Enemy.sightRange^2 + (Enemy.sightRange*math.tan(Enemy.Vision.angle))^2)
     end
 
-    Enemy.VisionCone.Renderer.points =
-    {
+    Enemy.VisionCone.points = {
         {
             x = Enemy.Transform.cx,
             y = Enemy.Transform.cy
@@ -103,8 +115,11 @@ local function RefreshVision(Enemy)
         {
             x = Enemy.Transform.cx + Enemy.Vision.hyp*math.cos(Enemy.Transform.angle + Enemy.Vision.angle),
             y = Enemy.Transform.cy + Enemy.Vision.hyp*math.sin(Enemy.Transform.angle + Enemy.Vision.angle)
-        }          
+        }
     }
+
+    Enemy.VisionCone.Renderer.points = Enemy.VisionCone.points
+    
 end
 
 ---------------------------------------------------------------------------------------------------
