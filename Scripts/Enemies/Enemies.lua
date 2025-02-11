@@ -16,8 +16,8 @@ function Enemies:Create(params)
             love.graphics.setColor(1, 0, 1, 1)
             love.graphics.print(enemy.dot, enemy.Transform.x, enemy.Transform.y)
 
-            love.graphics.line(enemy.Transform.cx, enemy.Transform.cy, enemy.Transform.cx + enemy.DirectionToPlayer.x, enemy.Transform.cy + enemy.DirectionToPlayer.y)
-            love.graphics.line(enemy.Transform.cx, enemy.Transform.cy, enemy.Vision.x, enemy.Vision.y)
+            love.graphics.line(enemy.Transform.x, enemy.Transform.y, enemy.Transform.x + enemy.DirectionToPlayer.x, enemy.Transform.y + enemy.DirectionToPlayer.y)
+            love.graphics.line(enemy.Transform.x, enemy.Transform.y, enemy.Vision.x, enemy.Vision.y)
             love.graphics.setColor(r,g,b,a)
         end
     end
@@ -29,7 +29,7 @@ function Enemies:Create(params)
     enemy.Vision.angle = math.acos(params.visionAngle or 0.8)
 
     enemy.VisionCone = {}
-    enemy.VisionCone.Renderer = Renderers:CreateRenderer({})
+    enemy.VisionCone.Renderer = Renderers:CreateRenderer({transform = params.transform, points = {}})
 
     local state = IdleState:Create({owner = self})
     enemy.StateMachine = StateMachines:CreateStateMachine(state)
@@ -42,8 +42,8 @@ end
 local function CanSeePoint(x, y, Enemy)
     Enemy.DirectionToPlayer =
     {
-        x = x - Enemy.Transform.cx,
-        y = y - Enemy.Transform.cy
+        x = x - Enemy.Transform.x,
+        y = y - Enemy.Transform.y
     }
     
     local playerMag = math.sqrt((Enemy.DirectionToPlayer.x * Enemy.DirectionToPlayer.x) + (Enemy.DirectionToPlayer.y * Enemy.DirectionToPlayer.y))
@@ -52,8 +52,8 @@ local function CanSeePoint(x, y, Enemy)
 
     local enemyDirection =
     {
-        x = Enemy.Vision.x - Enemy.Transform.cx,
-        y = Enemy.Vision.y - Enemy.Transform.cy
+        x = Enemy.Vision.x - Enemy.Transform.x,
+        y = Enemy.Vision.y - Enemy.Transform.y
     }
     local enemyMag = math.sqrt((enemyDirection.x * enemyDirection.x) + (enemyDirection.y * enemyDirection.y))
     enemyDirection.x = enemyDirection.x / enemyMag
@@ -87,17 +87,14 @@ end
 
 local function CanSeePlayer(PlayerTransform, Enemy)
     return
-        CanSeePoint(PlayerTransform.x, PlayerTransform.y, Enemy) or
-        CanSeePoint(PlayerTransform.x + PlayerTransform.w, PlayerTransform.y, Enemy) or
-        CanSeePoint(PlayerTransform.x, PlayerTransform.y + PlayerTransform.h, Enemy) or
-        CanSeePoint(PlayerTransform.x + PlayerTransform.w, PlayerTransform.y + PlayerTransform.h, Enemy)
+        CanSeePoint(PlayerTransform.x, PlayerTransform.y, Enemy)
 end
 
 ---------------------------------------------------------------------------------------------------
 
 local function RefreshVision(Enemy)
-    Enemy.Vision.x = Enemy.Transform.cx + Enemy.sightRange * math.cos(Enemy.Transform.angle)
-    Enemy.Vision.y = Enemy.Transform.cy + Enemy.sightRange * math.sin(Enemy.Transform.angle)
+    Enemy.Vision.x = Enemy.Transform.x + Enemy.sightRange * math.cos(Enemy.Transform.angle)
+    Enemy.Vision.y = Enemy.Transform.y + Enemy.sightRange * math.sin(Enemy.Transform.angle)
 
     if Enemy.Vision.hyp == nil then
         Enemy.Vision.hyp = math.sqrt(Enemy.sightRange^2 + (Enemy.sightRange*math.tan(Enemy.Vision.angle))^2)
@@ -105,16 +102,16 @@ local function RefreshVision(Enemy)
 
     Enemy.VisionCone.points = {
         {
-            x = Enemy.Transform.cx,
-            y = Enemy.Transform.cy
+            x = Enemy.Transform.x,
+            y = Enemy.Transform.y
         },
         {
-            x = Enemy.Transform.cx + Enemy.Vision.hyp*math.cos(Enemy.Transform.angle - Enemy.Vision.angle),
-            y = Enemy.Transform.cy + Enemy.Vision.hyp*math.sin(Enemy.Transform.angle - Enemy.Vision.angle)
+            x = Enemy.Transform.x + Enemy.Vision.hyp*math.cos(Enemy.Transform.angle - Enemy.Vision.angle),
+            y = Enemy.Transform.y + Enemy.Vision.hyp*math.sin(Enemy.Transform.angle - Enemy.Vision.angle)
         },
         {
-            x = Enemy.Transform.cx + Enemy.Vision.hyp*math.cos(Enemy.Transform.angle + Enemy.Vision.angle),
-            y = Enemy.Transform.cy + Enemy.Vision.hyp*math.sin(Enemy.Transform.angle + Enemy.Vision.angle)
+            x = Enemy.Transform.x + Enemy.Vision.hyp*math.cos(Enemy.Transform.angle + Enemy.Vision.angle),
+            y = Enemy.Transform.y + Enemy.Vision.hyp*math.sin(Enemy.Transform.angle + Enemy.Vision.angle)
         }
     }
 

@@ -8,9 +8,9 @@ function Player:Initialise(params)
     end
     
 function Player:Update(dt)
-        if love.keyboard.isDown("w") then
-            self.Transform.y = self.Transform.y - self.Speed * dt
-        end
+    if love.keyboard.isDown("w") then
+        self.Transform.y = self.Transform.y - self.Speed * dt
+    end
 
     if love.keyboard.isDown("s") then
         self.Transform.y = self.Transform.y + self.Speed * dt
