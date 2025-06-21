@@ -1,4 +1,0 @@
-local MathUtils = {}
-
-
-return MathUtils

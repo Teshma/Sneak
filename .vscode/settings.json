@@ -3,6 +3,8 @@
         "love"
     ],
     "Lua.diagnostics.disable": [
-        "deprecated"
+        "deprecated",
+        "trailing-space",
+        "lowercase-global"
     ]
 }

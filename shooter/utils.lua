@@ -4,7 +4,7 @@ local function FindAllFilesInFolder(folder)
     if results == nil then
         return
     end
-    
+
     for _, item in ipairs(results) do
         local info = love.filesystem.getInfo(folder.."/"..item)
         if info.type == "directory" then
@@ -18,7 +18,9 @@ local function FindAllFilesInFolder(folder)
     return files
 end
 
-function RequireScripts(scriptsFolder)
+-- ------------------------------------------------------------------------------
+
+function RequireFolder(scriptsFolder)
     local files = FindAllFilesInFolder(scriptsFolder) or {}
     for i_, file in ipairs(files) do
         print("requiring " .. file)
@@ -26,6 +28,7 @@ function RequireScripts(scriptsFolder)
     end
 end
 
+-- ------------------------------------------------------------------------------
 
 function table.append(table1, table2)
     for _, value in ipairs(table2) do
