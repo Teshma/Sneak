@@ -35,3 +35,13 @@ function table.append(table1, table2)
         table.insert(table1, value)
     end
 end
+
+-- ------------------------------------------------------------------------------
+
+function table.copy(source, destination)
+    for k,v in pairs(source) do
+        destination[k] = v
+    end
+end
+
+-- ------------------------------------------------------------------------------

@@ -18,6 +18,10 @@ end
 function love.update(dt)
     player:update(dt)
     enemy:update(dt)
+
+    for _,p in ipairs(projectiles) do
+        p:update(dt)
+    end
 end
 
 -- ------------------------------------------------------------------------------
@@ -27,6 +31,9 @@ function love.draw()
 
     player:draw()
     enemy:draw()
+    for _,p in ipairs(projectiles) do
+        p:draw()
+    end
 end
 
 -- ------------------------------------------------------------------------------
