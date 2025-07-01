@@ -1,15 +1,15 @@
 projectiles = {}
 local projectile =
 {
-    w = 12,
-    h = 4,
+    w = 24,
+    h = 24,
 }
 
 function CreateProjectile(x, y, direction, speed)
     local new =
     {
-        x = x,
-        y = y,
+        x = x - projectile.w/2,
+        y = y - projectile.h/2,
         dir = direction,
         speed = speed,
     }

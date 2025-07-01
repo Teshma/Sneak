@@ -43,9 +43,17 @@ function love.keypressed(key)
         love.event.quit()
     end
 
+    if key == "lshift" then
+        if player.current_velocity[1] ~= 0 then
+            player.x = player.x + (math.sign(player.current_velocity[1]) * 100)
+        end
+        if player.current_velocity[2] ~= 0 then
+            player.y = player.y + (math.sign(player.current_velocity[2]) * 100)
+        end
+    end
+
     if key == "0" then
         debug = not debug
     end
 end
-
 -- ------------------------------------------------------------------------------

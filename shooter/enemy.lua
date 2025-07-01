@@ -7,6 +7,7 @@ local enemy =
     bullet_speed = 200,
     bullets = {},
     state = "shoot",
+    shot_count = 0,
 }
 
 function CreateEnemy(x, y, w, h, speed)
@@ -44,22 +45,30 @@ end
 
 function enemy:shoot(dt)
     CreateProjectile(self.x, self.y, self.direction, self.speed)
-
+    self.shot_count = self.shot_count + 1
     self.current_timer = 1
     self.current_state = self.wait
 end
+
+-- ------------------------------------------------------------------------------
 
 function enemy:wait(dt)
     self.current_timer = self.current_timer - dt
 
     if (self.current_timer <= 0) then
-
-        self.current_state = self.turn
+        if math.fmod(self.shot_count, 3) ~= 0 then
+            self.current_state = self.shoot
+        else
+            self.current_state = self.turn
+        end
     end
 end
 
+-- ------------------------------------------------------------------------------
+
 function enemy:turn(dt)
     self.direction = {-self.direction[2], self.direction[1]}
+    self.shot_count = 0
     self.current_state = self.shoot
 end
 
