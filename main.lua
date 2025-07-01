@@ -43,13 +43,13 @@ function love.keypressed(key)
         love.event.quit()
     end
 
-    if key == "lshift" then
-        if player.current_velocity[1] ~= 0 then
-            player.x = player.x + (math.sign(player.current_velocity[1]) * 100)
-        end
-        if player.current_velocity[2] ~= 0 then
-            player.y = player.y + (math.sign(player.current_velocity[2]) * 100)
-        end
+    if key == "lshift" and player.can_dash then
+        player.behaviour.target_pos[1] = player.x + (math.sign(player.current_velocity[1]) * 100)
+        player.behaviour.target_pos[2] = player.y + (math.sign(player.current_velocity[2]) * 100)
+        player.dash_velocity[1] = (player.behaviour.target_pos[1] - player.x) / 60
+        player.dash_velocity[2] = (player.behaviour.target_pos[2] - player.y) / 60
+        player.prev_state = player.state
+        player.state = player.states.dashing
     end
 
     if key == "0" then
