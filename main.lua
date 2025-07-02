@@ -9,18 +9,42 @@ debug = false
 
 function love.load()
     Width, Height = love.graphics.getDimensions()
+    objects = {}
     player:init(50, 50, 64, 64, 100)
     enemy = CreateEnemy(Width/2, Height/2, 64, 64, 100)
+    table.insert(objects, player)
+    table.insert(objects, enemy)
 end
 
 -- ------------------------------------------------------------------------------
 
 function love.update(dt)
-    player:update(dt)
-    enemy:update(dt)
+    for i, first in ipairs(objects) do
+        repeat
+            if first == nil then
+                break
+            end
+            if not first.dead then first:update(dt) end
 
-    for _,p in ipairs(projectiles) do
-        p:update(dt)
+            for j, second in ipairs(objects) do
+                repeat
+                    if j == i then
+                        break
+                    end
+
+                    if first == nil or second == nil then
+                        break
+                    end
+
+                    if  first.x + first.w > second.x and first.x < second.x + second.w and
+                    first.y + first.h > second.y and first.y < second.y + second.h then
+                        -- collision
+                        if first.on_collision then first:on_collision(second) end
+                        if second.on_collision then second:on_collision(first) end
+                    end
+                until true
+            end
+        until true
     end
 end
 
@@ -29,10 +53,8 @@ end
 function love.draw()
     love.graphics.print(love.timer.getFPS(), 0, 0)
 
-    player:draw()
-    enemy:draw()
-    for _,p in ipairs(projectiles) do
-        p:draw()
+    for _, object in ipairs(objects) do
+        if not object.dead then object:draw() end
     end
 end
 

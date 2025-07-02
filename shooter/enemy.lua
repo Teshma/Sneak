@@ -44,7 +44,7 @@ end
 -- ------------------------------------------------------------------------------
 
 function enemy:shoot(dt)
-    CreateProjectile(self.x, self.y, self.direction, self.speed)
+    CreateProjectile(self.x, self.y, self.direction, self.speed, self)
     self.shot_count = self.shot_count + 1
     self.current_timer = 1
     self.current_state = self.wait

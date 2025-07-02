@@ -11,10 +11,11 @@ end
 
 -- ------------------------------------------------------------------------------
 player.dash_cooldown = 0.5
-player.current_dash_cooldown = player.dash_cooldown
+player.current_dash_cooldown = 0
 player.can_dash = true
 player.dash_velocity = {0, 0}
 player.current_velocity = {0, 0}
+
 player.states =
 {
     walking = "walking",
@@ -44,8 +45,8 @@ player.behaviour[player.states.walking] = function (self, dt)
         self.current_velocity[1] = self.speed
     end
 
-    self.y = self.y + self.current_velocity[2] * dt
     self.x = self.x + self.current_velocity[1] * dt
+    self.y = self.y + self.current_velocity[2] * dt
 
     if self.prev_state == self.states.dashing  and self.current_dash_cooldown > 0 then
         self.current_dash_cooldown = self.current_dash_cooldown - dt
@@ -54,6 +55,8 @@ player.behaviour[player.states.walking] = function (self, dt)
         end
     end
 end
+
+-- ------------------------------------------------------------------------------
 
 player.behaviour[player.states.dashing] = function (self, dt)
     self.can_dash = false
@@ -75,6 +78,8 @@ end
 function player:update(dt)
     self.behaviour[self.state](self, dt)
 end
+
+-- ------------------------------------------------------------------------------
 
 function player:draw()
     love.graphics.rectangle("line", self.x, self.y, self.w, self.h)
