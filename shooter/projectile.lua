@@ -41,5 +41,10 @@ function projectile:on_collision(other)
         return
     end
 
+    print(other:name())
     self.dead = true
+end
+
+function projectile:name()
+    return "projectile"..self.pos
 end

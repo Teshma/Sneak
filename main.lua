@@ -21,18 +21,15 @@ end
 function love.update(dt)
     for i, first in ipairs(objects) do
         repeat
-            if first == nil then
+            if first.dead then
                 break
             end
-            if not first.dead then first:update(dt) end
+
+            first:update(dt)
 
             for j, second in ipairs(objects) do
                 repeat
-                    if j == i then
-                        break
-                    end
-
-                    if first == nil or second == nil then
+                    if j == i or second.dead then
                         break
                     end
 
@@ -74,8 +71,23 @@ function love.keypressed(key)
         player.state = player.states.dashing
     end
 
+    if key == "space" and player.can_shoot then
+        player.weapon_state = player.weapon_states.shooting
+    end
+
     if key == "0" then
         debug = not debug
     end
 end
+
 -- ------------------------------------------------------------------------------
+
+function love.keyreleased(key)
+    if key == "w" or key == "s" then
+        -- player.current_direction[2] = 0
+    end
+
+    if key == "a" or "d" then
+        -- player.current_direction[1] = 0
+    end
+end

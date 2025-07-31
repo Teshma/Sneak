@@ -8,6 +8,7 @@ local enemy =
     bullets = {},
     state = "shoot",
     shot_count = 0,
+    dead = false,
 }
 
 function CreateEnemy(x, y, w, h, speed)
@@ -37,14 +38,14 @@ end
 -- ------------------------------------------------------------------------------
 
 function enemy:draw()
-    love.graphics.rectangle("line", self.x - self.w / 2, self.y - self.h / 2, self.w, self.h)
-    love.graphics.line(self.x, self.y, self.x + (self.direction[1] * 50), self.y + (self.direction[2] * 50))
+    love.graphics.rectangle("line", self.x , self.y, self.w, self.h)
+    love.graphics.line(self.x + self.w/2, self.y + self.h/2, self.x + self.w/2 + (self.direction[1] * 50), self.y + self.h/2 + (self.direction[2] * 50))
 end
 
 -- ------------------------------------------------------------------------------
 
 function enemy:shoot(dt)
-    CreateProjectile(self.x, self.y, self.direction, self.speed, self)
+    CreateProjectile(self.x + self.w/2, self.y + self.h/2, self.direction, self.speed, self)
     self.shot_count = self.shot_count + 1
     self.current_timer = 1
     self.current_state = self.wait
@@ -73,3 +74,17 @@ function enemy:turn(dt)
 end
 
 -- ------------------------------------------------------------------------------
+
+function enemy:on_collision(other)
+    if (other.owner and other.owner == self) or other == player then
+        return
+    end
+
+    self.dead = true
+end
+
+-- ------------------------------------------------------------------------------
+
+function enemy:name()
+    return "enemy"
+end
