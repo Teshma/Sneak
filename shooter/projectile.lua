@@ -1,18 +1,20 @@
 projectiles = {}
 local projectile =
 {
-    w = 24,
-    h = 24,
+
 }
 
-function CreateProjectile(x, y, direction, speed, owner)
+function CreateProjectile(x, y, w, h, direction, speed, owner)
     local new =
     {
-        x = x - projectile.w/2,
-        y = y - projectile.h/2,
+        x = x - w/2,
+        y = y - h/2,
+        w = w,
+        h = h,
         dir = direction,
         speed = speed,
         owner = owner,
+        type = "bullet"
     }
 
     table.copy(projectile, new)
@@ -38,6 +40,10 @@ end
 
 function projectile:on_collision(other)
     if other == self.owner then
+        return
+    end
+
+    if other.type == "bullet" then
         return
     end
 
